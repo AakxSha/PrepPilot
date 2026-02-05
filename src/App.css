@@ -1,0 +1,62 @@
+body {
+  margin: 0;
+  background: #f1f5f9;
+  font-family: Arial, sans-serif;
+}
+
+.app-container {
+  max-width: 650px;
+  margin: 40px auto;
+  background: white;
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.subtitle {
+  color: #555;
+  margin-bottom: 25px;
+}
+
+label {
+  font-weight: 600;
+  display: block;
+  margin-bottom: 5px;
+}
+
+select {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border-radius: 6px;
+}
+
+.roadmap-title {
+  margin-top: 30px;
+}
+
+.week-card {
+  padding: 15px;
+  margin-bottom: 10px;
+  border-radius: 10px;
+  background: #f9fafb;
+  border-left: 6px solid #2563eb;
+}
+.week-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.week-card input {
+  transform: scale(1.2);
+  cursor: pointer;
+}
+
+.progress-box {
+  margin-bottom: 15px;
+  font-size: 16px;
+  background: #eef2ff;
+  padding: 10px;
+  border-radius: 8px;
+}
