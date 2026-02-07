@@ -1,0 +1,71 @@
+/* Page background */
+body {
+  background-color: #f5f7fb;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Container */
+.roadmap-container {
+  max-width: 700px;
+  margin: 40px auto;
+  padding: 20px;
+}
+
+/* Card */
+.card {
+  background: #ffffff;
+  padding: 25px;
+  margin-bottom: 25px;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+}
+
+/* Headings */
+.card h2 {
+  margin-bottom: 20px;
+  color: #222;
+}
+
+/* Labels */
+label {
+  font-weight: 600;
+  margin-top: 15px;
+  display: block;
+}
+
+/* Dropdowns */
+select {
+  width: 100%;
+  padding: 10px;
+  margin-top: 6px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+/* Button */
+button {
+  width: 100%;
+  margin-top: 20px;
+  padding: 12px;
+  background-color: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #1e40af;
+}
+
+/* Roadmap list */
+.roadmap ul {
+  margin-top: 15px;
+  padding-left: 20px;
+}
+
+.roadmap li {
+  margin-bottom: 8px;
+  font-size: 15px;
+}
