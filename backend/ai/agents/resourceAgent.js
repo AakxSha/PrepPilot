@@ -1,5 +1,8 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import dotenv from "dotenv";
+import { saveCache, loadCache } from "../utils/cache.js";
+
+
 
 dotenv.config();
 
