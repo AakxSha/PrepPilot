@@ -23,7 +23,7 @@ Rules:
 - No extra text
 
 User request:
-${userInput}
+${JSON.stringify(userInput)}
 
 Return format:
 
@@ -42,13 +42,26 @@ Return format:
 
     let response = result.response.text();
 
-    response = response.replace(/```json/g, "");
-    response = response.replace(/```/g, "");
+    // Clean Gemini formatting
+    response = response
+      .replace(/```json/g, "")
+      .replace(/```/g, "")
+      .trim();
 
-    return response.trim();
+    const parsed = JSON.parse(response);
+
+    return parsed;   
 
   } catch (err) {
     console.error("Planner Agent Error:", err);
-    throw err;
+    return {
+      goal: userInput.goal,
+      level: userInput.level,
+      duration_days: userInput.totalDays,
+      daily_hours: userInput.dailyHours,
+      topics: userInput.subjects || [],
+      revision_days: 0,
+      practice_ratio: 0.5
+    };
   }
 }
