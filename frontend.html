@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>PrepPilot AI</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f4f6f9;
+      color: #333;
+    }
+
+    header {
+      background: #1f2937;
+      color: white;
+      padding: 18px 30px;
+      font-size: 20px;
+      font-weight: 600;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 30px auto;
+      padding: 0 20px;
+    }
+
+    .card {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+
+    h2 {
+      margin-top: 0;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 8px;
+      margin: 8px 0;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      padding: 10px 15px;
+      border-radius: 4px;
+      border: none;
+      background: #2563eb;
+      color: white;
+      cursor: pointer;
+      font-weight: 500;
+    }
+
+    button:hover {
+      background: #1d4ed8;
+    }
+
+    .secondary-btn {
+      background: #374151;
+    }
+
+    .secondary-btn:hover {
+      background: #4b5563;
+    }
+
+    .loading {
+      display: none;
+      margin-top: 10px;
+      font-weight: 500;
+    }
+
+    .error {
+      color: red;
+      margin-top: 10px;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+
+    .tab {
+      padding: 8px 14px;
+      background: #e5e7eb;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .tab.active {
+      background: #2563eb;
+      color: white;
+    }
+
+    .day-card {
+      border: 1px solid #e5e7eb;
+      padding: 15px;
+      margin-bottom: 10px;
+      border-radius: 6px;
+    }
+
+    .progress-bar {
+      height: 12px;
+      background: #e5e7eb;
+      border-radius: 6px;
+      overflow: hidden;
+      margin-bottom: 15px;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: #16a34a;
+      transition: 0.3s;
+    }
+
+    @media (max-width: 768px) {
+      .tabs { flex-direction: column; }
+    }
+  </style>
+</head>
+
+<body>
+
+<header>PrepPilot AI</header>
+
+<div class="container">
+
+  <div class="card">
+    <h2>Create Roadmap</h2>
+
+    <form id="roadmapForm">
+      <input type="text" id="goal" placeholder="Goal" required>
+      <input type="text" id="level" placeholder="Level" required>
+      <input type="number" id="totalDays" placeholder="Total Days" required>
+      <input type="number" id="dailyHours" placeholder="Daily Hours" required>
+      <input type="text" id="subjects" placeholder="Subjects (comma separated)" required>
+      <input type="text" id="focusAreas" placeholder="Focus Areas (comma separated)">
+
+      <select id="learningStyle">
+        <option value="Balanced">Balanced</option>
+        <option value="Video Focused">Video Focused</option>
+        <option value="Practice Heavy">Practice Heavy</option>
+      </select>
+
+      <br><br>
+
+      <button type="submit">Generate Roadmap</button>
+    </form>
+
+    <div class="loading" id="loading">Generating roadmap...</div>
+    <div class="error" id="errorMsg"></div>
+  </div>
+
+  <div id="resultSection" style="display:none;">
+
+    <div class="card">
+      <h2>Progress</h2>
+      <div class="progress-bar">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+      <button class="secondary-btn" onclick="exportPDF()">Export Roadmap as PDF</button>
+    </div>
+
+    <div class="card">
+      <div class="tabs">
+        <div class="tab active" onclick="showTab(event, 'schedule')">Schedule</div>
+        <div class="tab" onclick="showTab(event, 'resources')">Resources</div>
+      </div>
+
+      <div id="scheduleTab"></div>
+      <div id="resourcesTab" style="display:none;"></div>
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+let roadmapData = null;
+
+document.getElementById("roadmapForm").addEventListener("submit", async function(e) {
+  e.preventDefault();
+  errorMsg.innerText = "";
+  loading.style.display = "block";
+
+  const data = {
+    goal: goal.value,
+    level: level.value,
+    totalDays: parseInt(totalDays.value),
+    dailyHours: parseInt(dailyHours.value),
+    subjects: subjects.value.split(","),
+    focusAreas: focusAreas.value.split(","),
+    learningStyle: learningStyle.value,
+    includeMocks: includeMocks.checked
+  };
+
+  try {
+    const response = await fetch("http://localhost:5000/api/roadmap/generate", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data)
+    });
+
+    if (!response.ok) throw new Error("Server error");
+
+    roadmapData = await response.json();
+
+    localStorage.setItem("roadmap", JSON.stringify(roadmapData));
+    localStorage.removeItem("progress");
+
+    resultSection.style.display = "block";
+
+    renderSchedule();
+    renderResources();
+    calculateProgress();
+
+  } catch (err) {
+    errorMsg.innerText = "Failed to generate roadmap.";
+  }
+
+  loading.style.display = "none";
+});
+
+function renderSchedule() {
+  if (!roadmapData.schedule?.length) {
+    scheduleTab.innerHTML = "<p>No schedule generated.</p>";
+    return;
+  }
+
+  let html = "";
+
+  roadmapData.schedule.forEach(day => {
+    html += `
+      <div class="day-card">
+        <strong>Day ${day.day}: ${day.topic}</strong>
+        <p><b>Focus:</b> ${day.focus}</p>
+        <p><b>Estimated Hours:</b> ${day.estimatedHours}</p>
+        <label>
+          <input type="checkbox" onchange="updateProgress(${day.day})">
+          Mark as completed
+        </label>
+      </div>
+    `;
+  });
+
+  scheduleTab.innerHTML = html;
+  restoreProgress();
+}
+
+function renderResources() {
+  if (!roadmapData.resources?.length) {
+    resourcesTab.innerHTML = "<p>No resources available.</p>";
+    return;
+  }
+
+  let html = "";
+
+  roadmapData.resources.forEach(res => {
+    html += `
+      <div class="day-card">
+        <strong>${res.topic}</strong>
+        <p><b>YouTube:</b> ${res.youtube.join(", ")}</p>
+        <p><b>Docs:</b> ${res.docs.join(", ")}</p>
+        <p><b>Practice:</b> ${res.practice.join(", ")}</p>
+      </div>
+    `;
+  });
+
+  resourcesTab.innerHTML = html;
+}
+
+function updateProgress(day) {
+  let progress = JSON.parse(localStorage.getItem("progress")) || {};
+  progress[day] = !progress[day];
+  localStorage.setItem("progress", JSON.stringify(progress));
+  calculateProgress();
+}
+
+function restoreProgress() {
+  let progress = JSON.parse(localStorage.getItem("progress")) || {};
+  document.querySelectorAll("#scheduleTab input").forEach((checkbox, index) => {
+    if (progress[index + 1]) checkbox.checked = true;
+  });
+}
+
+function calculateProgress() {
+  const total = document.querySelectorAll("#scheduleTab input").length;
+  const completed = document.querySelectorAll("#scheduleTab input:checked").length;
+  const percent = total ? Math.round((completed / total) * 100) : 0;
+  progressFill.style.width = percent + "%";
+}
+
+function showTab(e, tab) {
+  document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+  e.target.classList.add("active");
+
+  scheduleTab.style.display = tab === "schedule" ? "block" : "none";
+  resourcesTab.style.display = tab === "resources" ? "block" : "none";
+}
+
+async function exportPDF() {
+  if (!roadmapData) {
+    alert("No roadmap available.");
+    return;
+  }
+
+  const response = await fetch("http://localhost:5000/api/roadmap/export-pdf", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ roadmap: roadmapData })
+  });
+
+  if (!response.ok) {
+    alert("Export failed.");
+    return;
+  }
+
+  const blob = await response.blob();
+  const url = window.URL.createObjectURL(blob);
+
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "PrepPilot-Roadmap.pdf";
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+}
+
+window.onload = function() {
+  const saved = localStorage.getItem("roadmap");
+  if (saved) {
+    roadmapData = JSON.parse(saved);
+    resultSection.style.display = "block";
+    renderSchedule();
+    renderResources();
+    restoreProgress();
+    calculateProgress();
+  }
+};
+</script>
+
+</body>
+</html>
