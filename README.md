@@ -1,70 +1,108 @@
-# Getting Started with Create React App
+# 🚀 PrepPilot – AI-Powered Personalized Roadmap Generator
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+PrepPilot is an AI-powered roadmap creation platform designed to help students prepare effectively for internships and placements. 
 
-## Available Scripts
+It generates personalized learning plans, provides curated resources, creates structured schedules, and enables progress tracking — all in one place.
 
-In the project directory, you can run:
+---
 
-### `npm start`
+## 📌 Problem Statement
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+Students preparing for internships and placements often rely on generic roadmaps that do not align with:
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- Individual timelines  
+- Skill levels  
+- Career goals  
+- Learning pace  
 
-### `npm test`
+Additionally, finding reliable and structured resources is time-consuming and overwhelming.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+PrepPilot solves this problem by generating a fully customized, AI-driven preparation roadmap.
 
-### `npm run build`
+---
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## 🎯 Solution Overview
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+PrepPilot allows users to:
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+1. Enter their goal (e.g., DSA, Web Development, ML)
+2. Specify timeline and skill level
+3. Generate a structured roadmap
+4. Get 2–3 curated resources per topic
+5. Automatically generate a study schedule
+6. Track their progress through a dashboard
 
-### `npm run eject`
+---
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## 🧠 System Architecture
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+The system follows a modular **Agent-Based Architecture**:
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+User → Planner Agent → Resource Agent → Scheduler Agent → Dashboard
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+### 🔹 Planner Agent
+Breaks the user goal into structured topics and milestones.
 
-## Learn More
+### 🔹 Resource Agent
+Provides 2–3 reliable learning resources per topic.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### 🔹 Scheduler Agent
+Converts the roadmap into a time-based study schedule.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+### 🔹 Dashboard
+Tracks user progress and completion status.
 
-### Code Splitting
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+## 🛠️ Tech Stack
 
-### Analyzing the Bundle Size
+### Frontend
+- React.js
+- HTML, CSS, JavaScript
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+### Backend
+- Node.js
+- Express.js
 
-### Making a Progressive Web App
+### Database
+- MongoDB / Firebase
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+### AI Integration
+- Google Gemini API
+- Prompt Engineering
+- Modular AI Agents
 
-### Advanced Configuration
+### Tools
+- GitHub
+- VS Code
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+---
 
-### Deployment
+## ✨ Key Features
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+- ✅ Personalized roadmap generation
+- ✅ Multiple curated resources per topic
+- ✅ Automated schedule creation
+- ✅ Progress tracking
+- ✅ Modular agent architecture
+- ✅ Scalable backend structure
 
-### `npm run build` fails to minify
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## 📸 Demo Flow
+
+1. User enters goal and timeline  
+2. AI generates structured roadmap  
+3. Resources are suggested per topic  
+4. Study schedule is created  
+5. User marks progress  
+
+---
+
+## ⚙️ Installation & Setup
+
+### 1️⃣ Clone the repository
+
+```bash
+git clone https://github.com/your-username/preppilot.git
+cd preppilot
