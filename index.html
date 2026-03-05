@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>PrepPilot AI</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    body {
+      background: #0f172a;
+      color: #e2e8f0;
+    }
+
+    header {
+      padding: 20px 60px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #111827;
+      border-bottom: 1px solid #1f2937;
+    }
+
+    header h1 {
+      color: #8b5cf6;
+    }
+
+    nav button {
+      background: none;
+      border: none;
+      color: #e2e8f0;
+      margin-left: 20px;
+      cursor: pointer;
+      font-size: 15px;
+    }
+
+    nav button:hover {
+      color: #8b5cf6;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: auto;
+      padding: 60px 20px;
+    }
+
+    .hero {
+      text-align: center;
+      padding: 80px 20px;
+    }
+
+    .hero h2 {
+      font-size: 40px;
+      margin-bottom: 20px;
+      background: linear-gradient(90deg,#8b5cf6,#6366f1);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero p {
+      font-size: 18px;
+      color: #94a3b8;
+      max-width: 700px;
+      margin: auto;
+      line-height: 1.6;
+    }
+
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit,minmax(250px,1fr));
+      gap: 25px;
+      margin-top: 60px;
+    }
+
+    .feature-card {
+      background: #1e293b;
+      padding: 25px;
+      border-radius: 12px;
+      border: 1px solid #334155;
+    }
+
+    .feature-card h3 {
+      margin-bottom: 10px;
+      color: #8b5cf6;
+    }
+
+    .card {
+      background: #1e293b;
+      padding: 30px;
+      border-radius: 12px;
+      border: 1px solid #334155;
+      margin-bottom: 30px;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 12px;
+      border-radius: 6px;
+      border: none;
+      background: #334155;
+      color: white;
+    }
+
+    button.primary {
+      background: linear-gradient(90deg,#6366f1,#8b5cf6);
+      border: none;
+      padding: 10px 16px;
+      border-radius: 6px;
+      color: white;
+      cursor: pointer;
+    }
+
+    .hidden { display: none; }
+
+    .day-card {
+      background: #0f172a;
+      border: 1px solid #334155;
+      padding: 18px;
+      border-radius: 10px;
+      margin-bottom: 15px;
+    }
+
+    .progress-bar {
+      background: #334155;
+      height: 12px;
+      border-radius: 10px;
+      overflow: hidden;
+      margin-bottom: 10px;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg,#22c55e,#16a34a);
+      transition: width 0.4s ease;
+    }
+
+    .resource-card {
+      background: #0f172a;
+      padding: 20px;
+      border-radius: 10px;
+      border: 1px solid #334155;
+      margin-bottom: 15px;
+    }
+
+    .resource-card h4 {
+      color: #8b5cf6;
+      margin-bottom: 8px;
+    }
+
+    .resource-card p {
+      margin-bottom: 6px;
+      color: #cbd5e1;
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <h1>PrepPilot AI</h1>
+  <nav>
+    <button onclick="showPage('home')">Home</button>
+    <button onclick="showPage('create')">Create</button>
+    <button onclick="showPage('schedule')">Schedule</button>
+    <button onclick="showPage('resources')">Resources</button>
+  </nav>
+</header>
+
+<div class="container">
+
+  <!-- HOME -->
+  <div id="homePage">
+    <div class="hero">
+      <h2>Build Smarter Study Plans with AI</h2>
+      <p>
+        PrepPilot AI creates personalized study schedules with focus learning areas
+        to help you stay structured and consistent.
+      </p>
+    </div>
+
+    <div class="features">
+      <div class="feature-card">
+        <h3>Smart Scheduling</h3>
+        <p>Automatically distributes topics across days.</p>
+      </div>
+      <div class="feature-card">
+        <h3>Focus Learning</h3>
+        <p>Each day includes what to focus on.</p>
+      </div>
+      <div class="feature-card">
+        <h3>Curated Resources</h3>
+        <p>Trusted learning materials per topic.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- CREATE -->
+  <div id="createPage" class="hidden">
+    <div class="card">
+      <h2>Create Study Plan</h2>
+      <form id="roadmapForm">
+        <input type="text" id="goal" placeholder="Goal" required>
+        <input type="text" id="level" placeholder="Level" required>
+        <input type="number" id="totalDays" placeholder="Total Days" required>
+        <input type="number" id="dailyHours" placeholder="Daily Hours" required>
+        <input type="text" id="subjects" placeholder="Subjects (comma separated)" required>
+        <input type="text" id="focusAreas" placeholder="Focus Areas (comma separated)">
+        <button class="primary" type="submit">Generate Plan</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- SCHEDULE -->
+  <div id="schedulePage" class="hidden">
+    <div class="card">
+      <h2>Your Study Schedule</h2>
+      <div class="progress-bar">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+      <div id="progressText">0% Completed</div>
+      <div id="scheduleContent"></div>
+    </div>
+  </div>
+
+  <!-- RESOURCES -->
+  <div id="resourcesPage" class="hidden">
+    <div class="card">
+      <h2>Study Resources</h2>
+      <div id="resourcesContent"></div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+let roadmapData = null;
+
+function showPage(page){
+  homePage.classList.add("hidden");
+  createPage.classList.add("hidden");
+  schedulePage.classList.add("hidden");
+  resourcesPage.classList.add("hidden");
+
+  if(page==="home") homePage.classList.remove("hidden");
+  if(page==="create") createPage.classList.remove("hidden");
+  if(page==="schedule") schedulePage.classList.remove("hidden");
+  if(page==="resources") resourcesPage.classList.remove("hidden");
+}
+
+document.getElementById("roadmapForm").addEventListener("submit", async function(e){
+  e.preventDefault();
+
+  const data = {
+    goal: goal.value,
+    level: level.value,
+    totalDays: parseInt(totalDays.value),
+    dailyHours: parseInt(dailyHours.value),
+    subjects: subjects.value.split(",").map(s=>s.trim()),
+    focusAreas: focusAreas.value
+      ? focusAreas.value.split(",").map(s=>s.trim())
+      : []
+  };
+
+  const res = await fetch("http://localhost:5000/api/roadmap/generate",{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify(data)
+  });
+
+  roadmapData = await res.json();
+  renderSchedule();
+  renderResources();
+  showPage("schedule");
+});
+
+function renderSchedule(){
+  if(!roadmapData?.schedule) return;
+
+  let html="";
+  roadmapData.schedule.forEach((day,index)=>{
+    html+=`
+      <div class="day-card">
+        <strong>Day ${day.day || index+1}: ${day.topic}</strong>
+        <p><b>Focus:</b> ${day.focus || "Core concepts & practice"}</p>
+        <p><b>Estimated Hours:</b> ${day.estimatedHours}</p>
+        <label>
+          <input type="checkbox" onchange="updateProgress()">
+          Completed
+        </label>
+      </div>
+    `;
+  });
+
+  scheduleContent.innerHTML=html;
+}
+
+function renderResources(){
+  if(!roadmapData?.resources){
+    resourcesContent.innerHTML="<p>No resources generated.</p>";
+    return;
+  }
+
+  let html="";
+  roadmapData.resources.forEach(res=>{
+    html+=`
+      <div class="resource-card">
+        <h4>${res.topic}</h4>
+        <p><b>YouTube:</b> ${(res.youtube || []).join(", ")}</p>
+        <p><b>Docs:</b> ${(res.docs || []).join(", ")}</p>
+        <p><b>Practice:</b> ${(res.practice || []).join(", ")}</p>
+      </div>
+    `;
+  });
+
+  resourcesContent.innerHTML=html;
+}
+
+function updateProgress(){
+  const total=document.querySelectorAll("#scheduleContent input[type='checkbox']").length;
+  const done=document.querySelectorAll("#scheduleContent input[type='checkbox']:checked").length;
+  const percent= total ? Math.round((done/total)*100) : 0;
+  progressFill.style.width=percent+"%";
+  progressText.innerText=percent+"% Completed";
+}
+</script>
+
+</body>
+</html>
